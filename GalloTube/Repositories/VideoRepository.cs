@@ -7,12 +7,12 @@ namespace GalloTube.Repositories;
 
 public class VideoRepository : IVideoRepository
 {
-    readonly string connectionString = "server=localhost;port=3306;database=GalloFlixdb;uid=root;pwd=''";
+    readonly string connectionString = "server=localhost;port=3306;database=gallotubedb;uid=root;pwd=''";
 
     public void Create(Video model)
     {
         MySqlConnection connection = new(connectionString);
-        string sql = "insert into Movie(Title, Description, UploadDate, Duration, Image) "
+        string sql = "insert into Video(Title, Description, UploadDate, Duration, Image) "
               + "values (@Title, @Description, @UploadDate, @Duration, @Image)";
         MySqlCommand command = new(sql, connection)
         {
@@ -32,7 +32,7 @@ public class VideoRepository : IVideoRepository
     public void Delete(int? id)
     {
         MySqlConnection connection = new(connectionString);
-        string sql = "delete from Movie where Id = @Id";
+        string sql = "delete from Video where Id = @Id";
         MySqlCommand command = new(sql, connection)
         {
             CommandType = CommandType.Text
@@ -47,13 +47,13 @@ public class VideoRepository : IVideoRepository
     public List<Video> ReadAll()
     {
         MySqlConnection connection = new(connectionString);
-        string sql = "select * from Movie";
+        string sql = "select * from Video";
         MySqlCommand command = new(sql, connection)
         {
             CommandType = CommandType.Text
         };
         
-        List<Video> movies = new();
+        List<Video> videos = new();
         connection.Open();
         MySqlDataReader reader = command.ExecuteReader();
         while (reader.Read())
@@ -67,10 +67,10 @@ public class VideoRepository : IVideoRepository
                 Duration = reader.GetInt16("duration"),
                 Image = reader.GetString("image")
             };
-            movies.Add(movie);
+            videos.Add(movie);
         }
         connection.Close();
-        return movies;
+        return videos;
     }
 
     public Video ReadById(int? id)
